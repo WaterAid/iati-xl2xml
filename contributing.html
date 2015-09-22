@@ -50,6 +50,17 @@
 
 <h3>Now you can do other things.</h3>
 
+<p>In order to run the documentation you must do this:
+<img src="./images/generateDocsMain.jpg" alt="generate docs" />.
+<a href="https://tpetricek.github.io/FSharp.Formatting/commandline.html">Here</a> is the link to using the commandline tool.</p>
+
+<p>Or in code:
+    [lang=powershell]
+    PS C:\mark\excel\iati-xl2xml\packages\FSharp.Formatting.CommandTool.2.10.3\tools&gt; .\fsformatting.exe literate
+     --processDirectory --inputDirectory C:\mark\excel\iati-xl2xml\docs\main 
+     --outputDirectory C:\mark\excel\iati-xl2xml --templateFile C:\mark\excel\iati-xl2xml\docs\tools\template-main.html 
+     --replacements "project-name" "IATI XL2XML" "page-title" "iati-xl2xml" "github-link" "<a href="https://github.com/WaterAid/iati-xl2xml"">https://github.com/WaterAid/iati-xl2xml"</a></p>
+
         </div>
         <div class="span3">
 

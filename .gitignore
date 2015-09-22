@@ -2,7 +2,6 @@ packages.config
 packages
 
 docs/*
-!docs/output
 
 readme.md
 
