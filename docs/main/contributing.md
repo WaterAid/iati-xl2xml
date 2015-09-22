@@ -1,6 +1,6 @@
 ## Contributing to the project 
 
-We welcome contributions to the project.  We're not quite set up so you can just fork the project, pick an issue and send us a pull request so in the first instance please contact [Mike Smith](@mrdrsmith).
+We welcome contributions to the project.  We're not quite set up so you can just fork the project, pick an issue and send us a pull request so in the first instance please contact [Mike Smith](https://github.com/drmrsmith).
 
 Once that's done or if you just want to poke around then you'll need to follow these steps:
 
@@ -16,7 +16,8 @@ In order to run the documentation you must do this:
 
 Or in code:
 	[lang=powershell]
-	PS C:\mark\excel\iati-xl2xml\packages\FSharp.Formatting.CommandTool.2.10.3\tools> .\fsformatting.exe literate
+	
+	C:\mark\excel\iati-xl2xml\packages\FSharp.Formatting.CommandTool.2.10.3\tools\fsformatting.exe literate
 	 --processDirectory --inputDirectory C:\mark\excel\iati-xl2xml\docs\main 
 	 --outputDirectory C:\mark\excel\iati-xl2xml --templateFile C:\mark\excel\iati-xl2xml\docs\tools\template-main.html 
 	 --replacements "project-name" "IATI XL2XML" "page-title" "iati-xl2xml" "github-link" "https://github.com/WaterAid/iati-xl2xml"
