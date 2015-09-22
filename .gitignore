@@ -1,5 +1,9 @@
 packages
 
-docs/output
+# documentation files and directories for gh-pages branch
 
+images
+content
+index.html
+contributing.html
 

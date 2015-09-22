@@ -10,3 +10,15 @@ Once that's done or if you just want to poke around then you'll need to follow t
 - For the time being we use this to generate the documentation.
 
 ### Now you can do other things.
+In order to run the documentation you must do this:
+![generate docs](./images/generateDocsMain.jpg).
+[Here](https://tpetricek.github.io/FSharp.Formatting/commandline.html) is the link to using the commandline tool.
+
+Or in code:
+	[lang=powershell]
+	PS C:\mark\excel\iati-xl2xml\packages\FSharp.Formatting.CommandTool.2.10.3\tools> .\fsformatting.exe literate
+	 --processDirectory --inputDirectory C:\mark\excel\iati-xl2xml\docs\main 
+	 --outputDirectory C:\mark\excel\iati-xl2xml --templateFile C:\mark\excel\iati-xl2xml\docs\tools\template-main.html 
+	 --replacements "project-name" "IATI XL2XML" "page-title" "iati-xl2xml" "github-link" "https://github.com/WaterAid/iati-xl2xml"
+
+	 
