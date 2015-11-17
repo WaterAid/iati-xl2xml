@@ -1,3 +1,5 @@
+[![Issue Stats](http://issuestats.com/github/wateraid/iati-xl2xml/badge/issue)](http://issuestats.com/github/wateraid/iati-xl2xml)
+[![Issue Stats](http://issuestats.com/github/wateraid/iati-xl2xml/badge/pr)](http://issuestats.com/github/wateraid/iati-xl2xml)
 # iati-xl2xml
 This is a spreadsheet application for collating aid project data and reporting it using the [IATI standard](http://iatistandard.org/).  
 Please have a look at our [project documentation](http://wateraid.github.io/iati-xl2xml/index.html) for more information.  
