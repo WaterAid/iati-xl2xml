@@ -14,4 +14,5 @@ The principal developer is [Mark Townsend](https://github.com/markstownsend)
 
 ### How to use the documentation
 
-This documentation is a combination of developer documentation (generated automatically from the source code) and user documentation
+This documentation is a combination of developer documentation (generated automatically from the source code) and user documentation.  Please navigate to the appropriate page for  
+your role in the project using the links on the left.

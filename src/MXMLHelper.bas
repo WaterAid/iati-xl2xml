@@ -1,4 +1,3 @@
-Attribute VB_Name = "MXMLHelper"
 '####Module : MXMLHelper
 '#####Type : Module
 '#####Description : Functions to work with aspects of XML
@@ -47,3 +46,4 @@ Public Function ConvertToSpecialCharacter(ByRef p_strIn As String) As String
     ConvertToSpecialCharacter = Trim(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(p_strIn, Chr(34), "&quot;"), "&", "&amp;"), "'", "&apos;"), "<", "&lt;"), ">", "&gt;"), vbCrLf, ""), vbCr, ""), vbLf, ""), vbBack, ""), vbFormFeed, ""), vbNewLine, ""), vbNullChar, ""), vbNullString, ""), vbTab, ""), vbVerticalTab, ""))
 
 End Function
+

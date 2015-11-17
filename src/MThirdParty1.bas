@@ -1,4 +1,3 @@
-Attribute VB_Name = "MThirdParty1"
 '####Module : MThirdParty1
 '#####Type : Module
 '#####Description : Any code derived from a third party
@@ -107,3 +106,4 @@ End With
 Set GetLastCell = LastCell
 
 End Function
+

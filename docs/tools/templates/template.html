@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <!-- 
-      The iati-xl2xml parameters will be replaced with the 
+      The {page-title} parameters will be replaced with the 
       document title extracted from the <h1> element or
       file name, if there is no <h1> heading
     -->
-    <title>iati-xl2xml</title>
+    <title>{page-title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{page-description}">
     <meta name="author" content="{page-author}">
@@ -28,38 +28,22 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li><a href="http://wateraid.org/uk">wateraid</a></li>
-          <li><a href="https://github.com/WaterAid/iati-xl2xml">github page</a></li>
+          <li><a href="{github-link}">github page</a></li>
         </ul>
         <h3 class="muted"><img src="images/logo.png"/></h3>
       </div>
       <hr />
       <div class="row">
         <div class="span9" id="main">
-          <h1>Welcome to the IATI-XL2XML project.</h1>
-
-<h4>Project Goal</h4>
-
-<p>The goal of the project is to enable aid project data reporting to the <a href="http://iatistandard.org/">IATI standard</a></p>
-
-<h4>Project Stakeholders</h4>
-
-<p>The principal stakeholder and Product Owner is <a href="https://github.com/drmrsmith">Mike Smith</a> from <a href="http://www.wateraid.org/uk/">WaterAid</a></p>
-
-<p>The principal developer is <a href="https://github.com/markstownsend">Mark Townsend</a></p>
-
-<h4>Project Constraints</h4>
-
-<h3>How to use the documentation</h3>
-
-<p>This documentation is a combination of developer documentation (generated automatically from the source code) and user documentation</p>
-
+          {document}
         </div>
         <div class="span3">
 
           <ul class="nav nav-list" id="menu">
-            <li class="nav-header">IATI XL2XML</li>
+            <li class="nav-header">{project-name}</li>
             <li><a href="index.html">Home page</a></li>
             <li><a href="contributing.html">Contributing</a></li>
+            <li><a href="using.html">Using</a></li>
             <!--
 
               Here you can add links to other pages of the documentation 
@@ -75,6 +59,6 @@
         </div>
       </div>
     </div>
-    <a href="https://github.com/WaterAid/iati-xl2xml"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
+    <a href="{github-link}"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
   </body>
 </html>

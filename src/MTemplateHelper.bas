@@ -1,4 +1,3 @@
-Attribute VB_Name = "MTemplateHelper"
 '####Module : MTemplateHelper
 '#####Type : Module
 '#####Description : Contains methods to handle some of the inconsistencies and situations in the template
@@ -279,4 +278,5 @@ Public Function IsComplexElement(ByRef p_strIn As String) As Boolean
         IsComplexElement = False
     End If
 End Function
+
 

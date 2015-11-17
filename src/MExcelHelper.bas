@@ -1,4 +1,3 @@
-Attribute VB_Name = "MExcelHelper"
 '####Module : MExcelHelper
 '#####Type : Module
 '#####Description : Functions to work with the grid and other aspects of Excel
@@ -61,3 +60,4 @@ Public Sub ResetAppSettings()
     End With
 
 End Sub
+

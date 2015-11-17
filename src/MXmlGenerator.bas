@@ -1,4 +1,3 @@
-Attribute VB_Name = "MXmlGenerator"
 '####Module : MGenerateXml
 '#####Type : Module
 '#####Description : Functions to work with the grid and other aspects of Excel
@@ -204,4 +203,5 @@ Public Function ElementScan(ByRef p_strWorksheetName As String, _
     End If
 
 End Function
+
 
