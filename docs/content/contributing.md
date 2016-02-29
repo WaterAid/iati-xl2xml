@@ -8,7 +8,7 @@ Once that's done or if you just want to poke around then you'll need to follow t
 - Install [FAKE](http://fsharp.github.io/FAKE/index.html)
 - Run `build.cmd` in the project root directory. *
 
-* - We are presuming you are building on Windows for the time being.
+We are presuming you are building on Windows for the time being.
 
 ###Project structure
 
@@ -28,6 +28,7 @@ project
 	 |---files			* put static documentation in here *
 	 |---images
 	 |---output		* target directory for all public documentation, gets built in to here *
+	 |---specs		* contains requirements
 	 |---tools
 	      |
 		  |---templates	* contains *.cshtml templates for generating html from documentation *
@@ -59,8 +60,7 @@ Once you have the code the typical developer workflow that is being followed on 
 4.	Compile and save the workbook.
 5.	In a command line at the project root run the `Clean` target which will clean out the old documentation and source directories.
 6.	Run the `ExtractSource` target which will open the workbook and export the source code files in to the `src` directory.  *Note: this step currently depends on the Interop Assemblies being located at: `C:/Program Files (x86)/Microsoft Visual Studio 12.0/Visual Studio Tools for Office/PIA/Office15`.
-7.	Run the `ReferenceDocumentation` target which will parse the source files for their markdown and copy the markdown to the \docs\content\api directory.
+7.	Run the `ReferenceDocumentation` target which will parse the source files for their markdown and copy the markdown to the `\docs\content\api` directory.
 8.	Update the version in the RELEASE_NOTES.md file and save.
 9.	Run the `GenerateDocumentation` target which will create the html documentation from the markdown files.
-10.	Run the `Release` target (if you have permission) which will push the changes up to GitHub and tag a release.
-11.	Run the `PullRequest` target (if you don't have permission to release) which will create a pull request on GitHub and notify the repo owners.
+10.	Run the `Release` target when you are ready to go which will create a pull request on GitHub and notify the repo owners.  If you are making a pull request please keep the version number the same as it is but add `_yourgithubname` to the revision.  For example: `v1.0.1` becomes `v1.0.1_markstownsend` (in my case).

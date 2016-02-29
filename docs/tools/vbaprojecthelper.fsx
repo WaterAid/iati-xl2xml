@@ -16,7 +16,10 @@ open Microsoft.Vbe.Interop
 
 //// <summary>
 //// Persists the module to a file by the same name
-//// </summar> 
+//// </summary>
+//// <param name="vbComponent">the code module</param>
+//// <param name="filepath">the path to save the module at</param>
+//// <param name="extension">the file extension of the source file.  One of: .cls or .bas</param> 
 let private writeModule (vbComponent : VBComponent) (filepath : string) (extension : string) = 
     let codeModule = vbComponent.CodeModule
     let filename = filepath + @"\" + codeModule.Name + extension
@@ -34,6 +37,7 @@ let private writeModule (vbComponent : VBComponent) (filepath : string) (extensi
 //// <summary>
 //// Opens the workbook and gets access to the code modules.
 //// </summary>
+//// <param name="filename">the full path to the source spreadsheet file</param>
 let public getVbaSource filename = 
     let xlApp = new Microsoft.Office.Interop.Excel.ApplicationClass(Visible = true)
     let workbooks = xlApp.Workbooks
@@ -51,7 +55,7 @@ let public getVbaSource filename =
             for i in 1 .. moduleColl.Count do
                 match moduleColl.[i].Type with
                 | vbext_ComponentType.vbext_ct_ClassModule -> writeModule moduleColl.[i] filepath ".cls"
-                | vbext_ComponentType.vbext_ct_StdModule -> writeModule moduleColl.[i] filepath ".bas"
+                | vbext_ComponentType.vbext_ct_StdModule -> writeModule moduleColl.[i] filepath ".bas" 
                 | _ -> ()
             
             workbook.Close(false)
@@ -68,5 +72,5 @@ let public getVbaSource filename =
         if(not(obj.ReferenceEquals(xlApp, null)) && Marshal.IsComObject(xlApp)) then printfn "Remaining RCW references to xlApp: %i " (Marshal.ReleaseComObject(xlApp))
 
 // Generate
-let scriptArgs = Environment.GetCommandLineArgs().[2]   // it is passed as the 3rd argument in the command that launches fsi
-getVbaSource scriptArgs
+let scriptArgsSourceFile = Environment.GetCommandLineArgs().[2]   // it is passed as the 3rd argument in the command that launches fsi
+getVbaSource scriptArgsSourceFile

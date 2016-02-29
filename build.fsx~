@@ -24,7 +24,7 @@ let summary = "Aid project data reporting."
 let description = "Aid project data reporting to the IATI standard."
 
 // File system information 
-let mutable solutionFile  = "xl2xml.xlsm"
+let solutionFile  = "xl2xml.xlsm"
 let mutable solutionPath = @"C:\mark\excel\iati-xl2xml\src\"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
@@ -50,30 +50,6 @@ Target "CleanSource" (fun _ ->
 
 Target "CleanDocs" (fun _ ->
     CleanDirs ["docs/output"]
-)
-
-// --------------------------------------------------------------------------------------
-// Validate the application against the OpenXml schema
-let getValidationErrors (filename:string) = 
-    traceFAKE "starting OpenXml validation of source document"
-    let outcome = executeFSIWithScriptArgsAndReturnMessages "docs/tools/openxmlprojecthelper.fsx" [|filename|]
-    match outcome with
-    | (true, _) -> trace "passed OpenXml validation"
-    | (false, _) -> traceError "failed OpenXml validation with these errors" 
-    ()
-    traceFAKE "ending OpenXml validation of source document"
-
-Target "ValidateSourceDocument" (fun _ ->
-    let path = getUserInput "Enter the absolute path to the spreadsheet source file or leave blank to accept the default: "
-    match System.String.IsNullOrEmpty(path), System.String.IsNullOrWhiteSpace(path) with
-    | (true, false) -> solutionFile <- path
-    | (false, true) -> solutionFile <- path
-    | (false, false) -> solutionFile <- path
-    | (_,_) -> () 
-
-    match Fake.FileSystemHelper.fileExists(solutionFile) with
-    | false -> traceError "file does not exist" 
-    | true -> getValidationErrors solutionFile
 )
 
 //---------------------------------------------------------------------------------------
