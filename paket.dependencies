@@ -2,6 +2,7 @@ source https://nuget.org/api/v2
 
 nuget FSharp.Formatting
 nuget FAKE
+nuget octokit
 nuget SourceLink.Fake
 nuget DocumentFormat.OpenXml
 

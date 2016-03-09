@@ -20,9 +20,9 @@ open Microsoft.Vbe.Interop
 //// <param name="vbComponent">the code module</param>
 //// <param name="filepath">the path to save the module at</param>
 //// <param name="extension">the file extension of the source file.  One of: .cls or .bas</param> 
-let private writeModule (vbComponent : VBComponent) (filepath : string) (extension : string) = 
+let private writeModule (vbComponent : VBComponent) (filepath : string) (extension : string) (parent : string) = 
     let codeModule = vbComponent.CodeModule
-    let filename = filepath + @"\" + codeModule.Name + extension
+    let filename = filepath + @"\" + parent + "." + codeModule.Name + extension
     try
         try
             use outFile = File.CreateText(filename)
@@ -38,10 +38,11 @@ let private writeModule (vbComponent : VBComponent) (filepath : string) (extensi
 //// Opens the workbook and gets access to the code modules.
 //// </summary>
 //// <param name="filename">the full path to the source spreadsheet file</param>
-let public getVbaSource filename = 
+let public getVbaSource filename targetDir = 
     let xlApp = new Microsoft.Office.Interop.Excel.ApplicationClass(Visible = true)
     let workbooks = xlApp.Workbooks
-    let filepath = Directory.GetParent(filename).FullName
+    let filepath = targetDir
+    let filenameonly = FileInfo(filename).Name
     let mutable workbook = null
     let mutable codemodule = null
     let mutable vbProject = null
@@ -54,8 +55,8 @@ let public getVbaSource filename =
             moduleColl <- vbProject.VBComponents
             for i in 1 .. moduleColl.Count do
                 match moduleColl.[i].Type with
-                | vbext_ComponentType.vbext_ct_ClassModule -> writeModule moduleColl.[i] filepath ".cls"
-                | vbext_ComponentType.vbext_ct_StdModule -> writeModule moduleColl.[i] filepath ".bas" 
+                | vbext_ComponentType.vbext_ct_ClassModule -> writeModule moduleColl.[i] filepath ".cls" filenameonly
+                | vbext_ComponentType.vbext_ct_StdModule -> writeModule moduleColl.[i] filepath ".bas" filenameonly
                 | _ -> ()
             
             workbook.Close(false)
@@ -73,4 +74,5 @@ let public getVbaSource filename =
 
 // Generate
 let scriptArgsSourceFile = Environment.GetCommandLineArgs().[2]   // it is passed as the 3rd argument in the command that launches fsi
-getVbaSource scriptArgsSourceFile
+let scriptArgsTargetDir = Environment.GetCommandLineArgs().[3]
+getVbaSource scriptArgsSourceFile scriptArgsTargetDir

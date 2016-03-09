@@ -3,7 +3,9 @@
 // --------------------------------------------------------------------------------------
 
 #r @"packages/FAKE/tools/FakeLib.dll"
+#r @"lib/VbaMd.dll"
 
+open VbaMd.Main
 open Fake
 open Fake.Git
 open Fake.ReleaseNotesHelper
@@ -24,7 +26,7 @@ let summary = "Aid project data reporting."
 let description = "Aid project data reporting to the IATI standard."
 
 // File system information 
-let solutionFile  = "xl2xml.xlsm"
+let mutable solutionFile  = "xl2xml.xlsm"
 let mutable solutionPath = @"C:\mark\excel\iati-xl2xml\src\"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
@@ -44,12 +46,36 @@ let release = LoadReleaseNotes "RELEASE_NOTES.md"
 // --------------------------------------------------------------------------------------
 // Clean build results
 Target "CleanSource" (fun _ ->
-    !! "src/*.*" -- "src/*.xlsm"
+    !! (solutionPath + "*.*") -- (solutionPath + "*.xlsm")
         |> Seq.iter DeleteFile
 )
 
 Target "CleanDocs" (fun _ ->
     CleanDirs ["docs/output"]
+)
+
+// --------------------------------------------------------------------------------------
+// Validate the application against the OpenXml schema
+let getValidationErrors (filename:string) = 
+    traceFAKE "starting OpenXml validation of source document"
+    let outcome = executeFSIWithScriptArgsAndReturnMessages "docs/tools/openxmlprojecthelper.fsx" [|filename|]
+    match outcome with
+    | (true, _) -> trace "passed OpenXml validation"
+    | (false, _) -> traceError "failed OpenXml validation with these errors" 
+    ()
+    traceFAKE "ending OpenXml validation of source document"
+
+Target "ValidateSourceDocument" (fun _ ->
+    let path = getUserInput "Enter the absolute path to the spreadsheet source file or leave blank to accept the default: "
+    match System.String.IsNullOrEmpty(path), System.String.IsNullOrWhiteSpace(path) with
+    | (true, false) -> solutionFile <- path
+    | (false, true) -> solutionFile <- path
+    | (false, false) -> solutionFile <- path
+    | (_,_) -> () 
+
+    match Fake.FileSystemHelper.fileExists(solutionFile) with
+    | false -> traceError "file does not exist" 
+    | true -> getValidationErrors solutionFile
 )
 
 //---------------------------------------------------------------------------------------
@@ -73,14 +99,16 @@ Target "ExtractSource" (fun _ ->
 
 //---------------------------------------------------------------------------------------
 // Extract the markdown from the source files
-let getPublicComments (filename: string) = 
-    //TODO: this is where I link in to get the markdown out of a source file 
-    //having loaded the vbamd dll and call the parseFile function natively   
+let getPublicComments (filename: string) (parent: string) = 
+    parseFile filename parent
+    ()
 
 Target "ReferenceDocumentation" (fun _ ->
-    !! "src/*.*" -- "*.xlsm"
-        |> Seq.iter(fun f -> getPublicComments f)
-        |> Seq.iter(fun f -> Fake.FileHelper.CopyFile f @"docs/contents/api")
+    !! (solutionPath + @"*.*") -- (solutionPath + "*.xlsm")
+        |> Seq.iter(fun f -> getPublicComments f (solutionPath + solutionFile))
+        
+    !! (solutionPath + @"*.md")    
+        |> Seq.iter(fun f -> Fake.FileHelper.MoveFile @"docs/contents/api" f)
 )
 
 // --------------------------------------------------------------------------------------
@@ -156,7 +184,7 @@ Target "ReleaseDocs" (fun _ ->
     Branches.push tempDocsDir
 )
 
-#load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
+#load "./paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 open Octokit
 
 Target "Release" (fun _ ->

@@ -1,2 +1,5 @@
 packages
 *~
+*build.fsx_*
+.dll
+

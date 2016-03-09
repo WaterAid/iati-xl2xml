@@ -3,7 +3,9 @@
 // --------------------------------------------------------------------------------------
 
 #r @"packages/FAKE/tools/FakeLib.dll"
+#r @"lib/VbaMd.dll"
 
+open VbaMd.Main
 open Fake
 open Fake.Git
 open Fake.ReleaseNotesHelper
@@ -44,7 +46,7 @@ let release = LoadReleaseNotes "RELEASE_NOTES.md"
 // --------------------------------------------------------------------------------------
 // Clean build results
 Target "CleanSource" (fun _ ->
-    !! "src/*.*" -- "src/*.xlsm"
+    !! (solutionPath + "*.*") -- (solutionPath + "*.xlsm")
         |> Seq.iter DeleteFile
 )
 
@@ -81,15 +83,19 @@ Target "ValidateSourceDocument" (fun _ ->
 let getSource (filename: string) (docDirectory: string) = 
     let outcome = executeFSIWithScriptArgsAndReturnMessages "docs/tools/vbaprojecthelper.fsx" [|filename;docDirectory|]
     match outcome with
-    | (true, _) -> trace "source files successfully extracted."
+    | (true, _) -> trace "Source files successfully extracted."
     | (false, _) -> snd(outcome)|> Seq.iter (fun f -> traceError f.Message)
     ()
 
 Target "ExtractSource" (fun _ ->
    let path = getUserInput "Enter the absolute path to the solution directory or leave blank to accept the default: "
-   match Fake.FileSystemHelper.isValidPath(path), Fake.FileSystemHelper.isDirectory(path) with
-   | (true, true) -> solutionPath <-path
-   | _ -> ()
+   match String.IsNullOrWhiteSpace(path), String.IsNullOrEmpty(path) with
+   | (false, false) -> 
+       match Fake.FileSystemHelper.isValidPath(path), Fake.FileSystemHelper.isDirectory(path) with
+       | (true, true) -> solutionPath <-path
+       | _ -> ()
+    | (_,_) -> ()
+   Fake.TraceHelper.trace solutionPath
    // presume the default project structure is preserved and calculate the full path to the api doc directory
    let apiDocPath = Fake.EnvironmentHelper.combinePaths solutionPath @"..\docs\content\api"
    getSource (solutionPath + solutionFile) apiDocPath
@@ -97,15 +103,50 @@ Target "ExtractSource" (fun _ ->
 
 //---------------------------------------------------------------------------------------
 // Extract the markdown from the source files
-let getPublicComments (filename: string) = 
-    //TODO: this is where I link in to get the markdown out of a source file 
-    //having loaded the vbamd dll and call the parseFile function natively   
+let getPublicComments (filename: string) (parent: string) = 
+    parseFile filename parent
+    ()
 
 Target "ReferenceDocumentation" (fun _ ->
-    !! "src/*.*" -- "*.xlsm"
-        |> Seq.iter(fun f -> getPublicComments f)
-        |> Seq.iter(fun f -> Fake.FileHelper.CopyFile f @"docs/contents/api")
+    !! (solutionPath + @"*.*") -- (solutionPath + "*.xlsm")
+        |> Seq.iter(fun f -> getPublicComments f (solutionPath + solutionFile))
+        
+    !! (solutionPath + @"*.md")    
+        |> Seq.iter(fun f -> Fake.FileHelper.MoveFile @"docs/contents/api" f)
 )
+
+//---------------------------------------------------------------------------------------
+// Print the pattern search report from the source code
+let getPatternFromSource (filename: string) (pattern: string) = 
+    let outcome = executeFSIWithScriptArgsAndReturnMessages "docs/tools/textfilegrepper.fsx" [|filename;pattern|]
+    match outcome with
+    | (true, _) -> traceImportant ("Pattern found in file: " + filename) ; true
+    | (false, _) -> trace("Pattern not found in file: " + filename) ; false
+    
+Target "SearchSource" (fun _ ->
+   let path = getUserInput "Enter the absolute path to the source directory or leave blank to accept the default: "
+   match String.IsNullOrWhiteSpace(path), String.IsNullOrEmpty(path) with
+   | (false, false) -> 
+       match Fake.FileSystemHelper.isValidPath(path), Fake.FileSystemHelper.isDirectory(path) with
+       | (true, true) -> solutionPath <-path
+       | _ -> ()
+    | (_,_) -> ()
+   Fake.TraceHelper.trace solutionPath
+
+   let pattern = getUserInput "Enter the pattern to search for: "
+   match String.IsNullOrWhiteSpace(pattern), String.IsNullOrEmpty(pattern) with
+   | (false, false) -> 
+        use reportStream = new System.IO.StreamWriter(solutionPath + "report.txt",true)
+        !! (solutionPath + @"*.*") -- (solutionPath + "*.xlsm")
+            |> Seq.where(fun f -> getPatternFromSource f pattern)
+            |> Seq.iter(fun f -> reportStream.WriteLine f)
+        reportStream.Flush()
+        reportStream.Close()
+        Fake.TraceHelper.traceEndTarget "report generated"
+   | (_,_) -> Fake.TraceHelper.traceError "You must enter a non-empty pattern to search for."
+    
+)
+
 
 // --------------------------------------------------------------------------------------
 // Generate the documentation
@@ -180,7 +221,7 @@ Target "ReleaseDocs" (fun _ ->
     Branches.push tempDocsDir
 )
 
-#load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
+#load "./paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 open Octokit
 
 Target "Release" (fun _ ->

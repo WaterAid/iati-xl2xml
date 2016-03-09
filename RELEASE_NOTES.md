@@ -1,3 +1,7 @@
+#### 0.9.3 - March 3 2016
+* Added more build tooling
+* Corrected formula errors in workbook and cleaned up OpenXml validation errors
+
 #### 0.9.2 - December 25 2015
 * Updated developer workflow docs
 * Refined build script to extract VBA from file (dep on PIA).

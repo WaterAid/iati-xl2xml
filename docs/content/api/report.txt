@@ -1,0 +1,7 @@
+C:\mark\excel\iati-xl2xml\docs\content\api\xl2xml.xlsm.CStringBuilder.cls
+C:\mark\excel\iati-xl2xml\docs\content\api\xl2xml.xlsm.MExcelHelper.bas
+C:\mark\excel\iati-xl2xml\docs\content\api\xl2xml.xlsm.MTemplateHelper.bas
+C:\mark\excel\iati-xl2xml\docs\content\api\xl2xml.xlsm.MThirdParty1.bas
+C:\mark\excel\iati-xl2xml\docs\content\api\xl2xml.xlsm.MXL2XMLGlobals.bas
+C:\mark\excel\iati-xl2xml\docs\content\api\xl2xml.xlsm.MXmlGenerator.bas
+C:\mark\excel\iati-xl2xml\docs\content\api\xl2xml.xlsm.MXMLHelper.bas
